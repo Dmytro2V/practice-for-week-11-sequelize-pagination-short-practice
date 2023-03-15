@@ -17,6 +17,8 @@ app.get('/musicians', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
+    let page = req.query.page ? req.query.page: null;
+    let size = req.query.size ? req.query.size: null
     
     // Query for all musicians
     // Include attributes for `id`, `firstName`, and `lastName`
@@ -32,6 +34,8 @@ app.get('/musicians', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        limit: size,
+        offset: size * (page - 1)
     });
 
     res.json(musicians)
@@ -43,6 +47,8 @@ app.get('/bands', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
+    let page = req.query.page ? req.query.page: null;
+    let size = req.query.size ? req.query.size: null
     
     // Query for all bands
     // Include attributes for `id` and `name`
@@ -58,6 +64,8 @@ app.get('/bands', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        limit: size,
+        offset: size * (page - 1)
     });
 
     res.json(bands)
@@ -69,7 +77,8 @@ app.get('/instruments', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    
+   // let page = req.query.page ? req.query.page: null;
+   // let size = req.query.size ? req.query.size: null
     // Query for all instruments
     // Include attributes for `id` and `type`
     // Include associated musicians and their `id`, `firstName` and `lastName`
@@ -92,6 +101,9 @@ app.get('/instruments', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+       // limit: size,
+       // offset: size * (page - 1)
+       ...paginate(req)
     });
 
     res.json(instruments)
@@ -100,6 +112,16 @@ app.get('/instruments', async (req, res, next) => {
 // ADVANCED BONUS: Reduce Pagination Repetition
 // Your code here
 
+function paginate(req) {
+    let page = req.query.page ? req.query.page: null;
+    let size = req.query.size ? req.query.size: null;
+    let limit = size;
+    let offset = size * (page - 1)
+    return {
+        offset,
+        limit
+    };    
+}; // example of use in instruments
 
 // Root route - DO NOT MODIFY
 app.get('/', (req, res) => {
